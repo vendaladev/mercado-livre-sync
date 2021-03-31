@@ -1,7 +1,7 @@
-<?php namespace Livepixel\MercadoLivre;
+<?php namespace Vendaladev\MercadoLivreSync;
 
 use Illuminate\Support\ServiceProvider;
-use Livepixel\MercadoLivre\Meli;
+use Vendaladev\MercadoLivreSync\Meli;
 
 class MeliServiceProvider extends ServiceProvider
 {

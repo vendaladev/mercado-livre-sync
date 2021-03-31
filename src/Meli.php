@@ -1,4 +1,4 @@
-<?php namespace Livepixel\MercadoLivre;
+<?php namespace Vendaladev\MercadoLivreSync;
 
 class Meli {
 
@@ -208,6 +208,33 @@ class Meli {
         $uri = $this->make_path($path, $params);
         $ch = curl_init($uri);
         curl_setopt_array($ch, $this->curl_opts);
+
+        $access_token = null;
+        if (isset($params['access_token'])) {
+            $access_token = $params['access_token'];
+        }
+
+        $parts = parse_url($path);
+        if (isset($parts['query'])) {
+            parse_str($parts['query'], $query);
+            if (!empty($query['access_token'])) {
+                $access_token = $query['access_token'];
+            }
+        }
+
+        if (!empty($access_token)) {
+            if (isset($opts[CURLOPT_HTTPHEADER])) {
+                $opts[CURLOPT_HTTPHEADER] = array_merge(
+                    $opts[CURLOPT_HTTPHEADER],
+                    array('Authorization: Bearer ' . $access_token)
+                );
+            } else {
+                $opts[CURLOPT_HTTPHEADER] = array(
+                    'Authorization: Bearer ' . $access_token,
+                );
+            }
+        }
+
         if(!empty($opts)){
             curl_setopt_array($ch, $opts);
         }
@@ -234,6 +261,28 @@ class Meli {
         } else {
             $uri = $path;
         }
+
+        $parsed = parse_url($uri);
+        $query_string = '';
+
+        if (isset($parsed['query'])) {
+            $query = $parsed['query'];
+            parse_str($query, $params_query);
+
+            unset($params_query['access_token']);
+
+            if (!empty($params_query)) {
+                $query_string = '?' . http_build_query($params_query);
+            }
+        }
+
+        $uri = $parsed['scheme'] . '://' . $parsed['host'] . $parsed['path'] . $query_string;
+
+        if (isset($params['access_token'])) {
+            unset($params['access_token']);
+        }
+
+
         if(!empty($params)) {
             $paramsJoined = array();
             foreach($params as $param => $value) {
