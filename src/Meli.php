@@ -89,16 +89,25 @@ class Meli {
     public function refreshAccessToken($refresh_token = null) {
         if($refresh_token) {
 
-            $body = array(
+            /*$body = array(
                 "grant_type" => "refresh_token",
                 "client_id" => $this->client_id,
                 "client_secret" => $this->client_secret,
                 "refresh_token" => $refresh_token
-            );
+            );*/
 
-            $opts = array(
+            /*$opts = array(
                 CURLOPT_POST => true,
                 CURLOPT_POSTFIELDS => $body
+            );*/
+            
+            $opts = array(
+                CURLOPT_HTTPHEADER => array(
+                    'accept: application/json',
+                    'content-type: application/x-www-form-urlencoded'
+                ),
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => 'grant_type=refresh_token&client_id='.$this->client_id.'&client_secret='.$this->client_secret.'&refresh_token='.$refresh_token
             );
 
             return $this->execute($this->urls['OAUTH_URL'], $opts);
