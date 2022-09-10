@@ -82,7 +82,7 @@ class Meli {
                 'content-type: application/x-www-form-urlencoded'
             ),
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => 'grant_type=authorization_code&client_id='.$this->client_id.'&client_secret='.$this->client_secret.'&code='.$code.'&redirect_uri='.$redirect_uri
+            CURLOPT_POSTFIELDS => 'grant_type=authorization_code&client_id='.$this->client_id.'&client_secret='.$this->client_secret.'&code='.$code.'&redirect_uri='.urlencode($redirect_uri)
         );
 
         return $this->execute($this->urls['OAUTH_URL'], $opts);
