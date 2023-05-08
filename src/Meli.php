@@ -50,6 +50,18 @@ class Meli {
         $auth_uri = $this->urls['AUTH_URL']."?".http_build_query($params);
         return $auth_uri;
     }
+    
+    /**
+     * Return an string with a complete Meli login url.
+     *
+     * @param string $redirect_uri
+     * @return string
+     */
+    public function getAuthUrlV2($redirect_uri, $state) {
+        $params = array("client_id" => $this->client_id, "response_type" => "code", "redirect_uri" => $redirect_uri, "state" => $state);
+        $auth_uri = $this->urls['AUTH_URL']."?".http_build_query($params);
+        return $auth_uri;
+    }
 
     /**
      * Executes a POST Request to authorize the application and take
